@@ -1,10 +1,6 @@
 import levenshtein from "js-levenshtein";
-import fs from "fs";
-import path from "path";
 import { PayerData } from "../interfaces/types";
-
-const filePath = path.join(__dirname, "../data/payers.json");
-const data: PayerData[] = JSON.parse(fs.readFileSync(filePath, "utf-8")).items;
+import { payers } from "../data/payers";
 
 /**
  * Finds the best matching payer data based on the provided query string.
@@ -15,7 +11,7 @@ export function findPayerByName(query: string): null | PayerData {
   let bestMatch = null;
   let lowestDistance = Infinity;
 
-  data.forEach((item) => {
+  payers.forEach((item) => {
     // Combine payer's display name, aliases and names for comparison
     const payerNames = [item.displayName, ...item.aliases, ...item.names];
 
@@ -42,7 +38,7 @@ export function findPayerByName(query: string): null | PayerData {
 export function findPayersByName(query: string, count: number): PayerData[] {
   const results: { payer: PayerData; distance: number }[] = [];
 
-  data.forEach((item) => {
+  payers.forEach((item) => {
     // Combine payer's display name, aliases, and names for comparison
     const payerNames = [item.displayName, ...item.aliases, ...item.names];
 
